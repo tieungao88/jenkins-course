@@ -19,6 +19,8 @@ services:
     command: --storage-driver=overlay2
 
   jenkin-master:
+    depends_on:
+      - jenkin-docker
     container_name: jenkins-blueocean
     restart: on-failure[:3]
     image: myjenkins-blueocean:2.332.3-1

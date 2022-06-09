@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  jenkin-docker:
+    container_name: jenkin-docker
+    image: docker:dind
+    networks:
+      jenkins:
+        aliases:
+          - docker
+    privileged: true
+    environment:
+      - DOCKER_TLS_CERTDIR=/certs
+    ports:
+      - "2376:2376"
+    volumes:
+      - jenkins-docker-certs:/certs/client
+      - jenkins-data:/var/jenkins_home
+    command: --storage-driver=overlay2
+
+  jenkin-master:
+    image: imageName
+
+networks:
+  jenkins:
+    driver: bridge
+volumes:
+  jenkins-docker-certs:
+  jenkins-data:

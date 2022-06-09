@@ -2,28 +2,28 @@ version: '3.9'
 
 services:
   jenkin-docker:
-    container_name: jenkin-docker1
+    container_name: jenkin-docker
     image: docker:dind
     networks:
       jenkins1:
         aliases:
-          - docker1
+          - docker
     privileged: true
     environment:
       - DOCKER_TLS_CERTDIR=/certs
     ports:
       - "2376:2376"
     volumes:
-      - jenkins-docker-certs1:/certs/client
-      - jenkins-data1:/var/jenkins_home
+      - jenkins-docker-certs:/certs/client
+      - jenkins-data:/var/jenkins_home
     command: --storage-driver=overlay2
 
   jenkin-master:
-    container_name: jenkins-blueocean1
+    container_name: jenkins-blueocean
     restart: on-failure[:3]
     image: myjenkins-blueocean:2.332.3-1
     networks:
-      - jenkins1
+      - jenkins
     environment:
       - DOCKER_HOST=tcp://docker:2376
       - DOCKER_CERT_PATH=/certs/client
@@ -32,12 +32,12 @@ services:
       - "8080:8080"
       - "50000:50000"
     volumes:
-      - jenkins-data1:/var/jenkins_home
-      - jenkins-docker-certs1:/certs/client:ro
+      - jenkins-data:/var/jenkins_home
+      - jenkins-docker-certs:/certs/client:ro
 
 networks:
-  jenkins1:
+  jenkins:
     driver: bridge
 volumes:
-  jenkins-docker-certs1:
-  jenkins-data1:
+  jenkins-docker-certs:
+  jenkins-data:

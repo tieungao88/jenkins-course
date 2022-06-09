@@ -1,0 +1,6 @@
+# create jenkin agent
+docker run -d --rm --name=agent1 -p 22:22 \
+-e "JENKINS_AGENT_SSH_PUBKEY=ssh-rsa 
+AAAAB3NzaC1yc2EAAAADAQABAAABgQDORHDN5Ti5SC/UxtCxGlk4vYvl5RIgmgcbEPm7O6qICcN66OI+gWrvmTizPQEkRbsLF3At+zVTD9OlxnSVlcr6W+z7rIJrpbjWSFrIRkTYdS7eB0LarbS9DME45Q+2bjGB8BpidtSAmraA2E0CPNlJgeV5PtEuSwE4wgD+9nDRlY+akOZGlwkGt4N9TB5nqhfsYVmUr9EoF/gks1SpHFCC1eFY1zNADAQd8OQEXXXa6oXBC9v/i4+Ze5P31hQfJIjEUPRcDEEeVuScPkLUbwpSh55oaViKqoohCoX+mIroKqVYK5qOmnLz5cgGnjFMYPlwt59YTXkS/MMrOtZaFOqD02WcOO869RamqC5vI/UeDzCObQDB/evi9CIWM11Sk4hBx+VT1iMtZaUVGWs9UYppEuT/JmlB+hznSspC3DdnNX9+ZjPu29xtZLOPuM69itZ0Tu+xgbyi/J2WFwjsAou4UsxM3reeLbJNQaPtUpbClbb0q4EQjqCfoutxVXPGLvU=" 
+\ jenkins/ssh-agent:alpine --network jenkins
+

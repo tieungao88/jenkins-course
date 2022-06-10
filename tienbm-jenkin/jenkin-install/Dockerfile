@@ -10,3 +10,11 @@ RUN echo "deb [arch=$(dpkg --print-architecture) \
 RUN apt-get update && apt-get install -y docker-ce-cli
 USER jenkins
 RUN jenkins-plugin-cli --plugins "blueocean:1.25.3 docker-workflow:1.28"
+#RUN echo $PATH
+COPY add-sshkey.sh ./
+#CMD ["sh", "add-sshkey.sh"]
+#ENTRYPOINT ["/sbin/tini" "--" "/usr/local/bin/jenkins.sh"]
+#RUN rm -rf /var/jenkins_home/.ssh/*
+#COPY jenkins_agent_key /var/jenkins_home/.ssh/
+#COPY jenkins_agent_key.pub /var/jenkins_home/.ssh/
+#RUN chmod 600 /var/jenkins_home/.ssh/jenkins_agent_key && chmod 644 /var/jenkins_home/.ssh/jenkins_agent_key.pub

@@ -1,0 +1,45 @@
+FROM openjdk:11-jdk-buster
+
+ARG user=jenkins
+ARG group=jenkins
+ARG uid=1000
+ARG gid=1000
+ARG JENKINS_AGENT_HOME=/var/${user}_home
+
+ENV JENKINS_AGENT_HOME ${JENKINS_AGENT_HOME}
+#ENV PATH /usr/local/bin:/usr/bin:/bin:/usr/games:${JAVA_HOME}/bin
+RUN groupadd -g ${gid} ${group} \
+    && useradd -d "${JENKINS_AGENT_HOME}" -u "${uid}" -g "${gid}" -m -s /bin/bash "${user}"
+
+# setup docker
+RUN apt-get update && apt-get install -y lsb-release curl git
+RUN curl -fsSLo /usr/share/keyrings/docker-archive-keyring.asc \
+  https://download.docker.com/linux/debian/gpg
+RUN echo "deb [arch=$(dpkg --print-architecture) \
+  signed-by=/usr/share/keyrings/docker-archive-keyring.asc] \
+  https://download.docker.com/linux/debian \
+  $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+RUN apt-get update && apt-get install -y docker-ce-cli
+# setup SSH server
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y openssh-server \
+    && rm -rf /var/lib/apt/lists/*
+RUN sed -i /etc/ssh/sshd_config \
+        -e 's/#PermitRootLogin.*/PermitRootLogin no/' \
+        -e 's/#RSAAuthentication.*/RSAAuthentication yes/'  \
+        -e 's/#PasswordAuthentication.*/PasswordAuthentication no/' \
+        -e 's/#SyslogFacility.*/SyslogFacility AUTH/' \
+        -e 's/#LogLevel.*/LogLevel INFO/' && \
+    mkdir /var/run/sshd
+
+VOLUME "${JENKINS_AGENT_HOME}" "/tmp" "/run" "/var/run"
+#≈VOLUME "/run" "/var/run"
+WORKDIR "${JENKINS_AGENT_HOME}"
+
+COPY setup-sshd /usr/local/bin/setup-sshd
+
+EXPOSE 22
+
+RUN mkdir -p /usr/local/bin
+RUN ln -s /usr/local/openjdk-11/bin/java /usr/local/bin/java
+ENTRYPOINT ["setup-sshd"]

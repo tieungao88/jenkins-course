@@ -40,7 +40,7 @@ services:
   jenkin-slave:
     depends_on:
       - jenkin-docker
-    container_name: jenkins-slave01
+    container_name: jenkins-slave02
     restart: on-failure
     image: myjenkins/ssh-agent:latest
     networks:
@@ -49,10 +49,11 @@ services:
       - DOCKER_HOST=tcp://docker:2376
       - DOCKER_CERT_PATH=/certs/client
       - DOCKER_TLS_VERIFY=1
-      - JENKINS_AGENT_SSH_PUBKEY="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDEAZkSP5dt+T0XmcDE8wz/3xuR7VmW8TO7FdWuqbGnhvpw8ESJ/OISkATCh7UVilGzCdGasIksPf4XqMGrAdrXwpp/noG/g7k2YYAdfGwc1/K3PIocbVHr8B30HKqeFLjjkvyz6g56DpV/15o+SvSWs/QCGbpTEswAr3YM/e7wQE/TCDkRzmBTBRPMJlIzNFLkq2IO/wGnmmx6aOvHeRpx+q1ebKKt4N4Qlro2C2M4cB/lO8mrWhd1XNE4rGtUaTqByWCjNPuFu4KAJKuuoWBHF/wMYtYMOMsevoplHp6SdktFLsluLDJea85pFVJnqNBtdIobobMznwyk0se8Z/AeRemOts46n+z75SZyM8t0uAKb+iXBlGgykXeSkW1DAP80EUx8X9a9ji+8C2NTxV0GHuRPUmhpNQDp4/jd4CbcVfiGgCetOcZ7KVXi7LKwcODY3lixvhgTxn9QSDRJwIO7RtPe9VKIqMgNxugmNf0de4sNubsvtzEXqrvd9C0M6oM="
+      - JENKINS_AGENT_SSH_PUBKEY=ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDEAZkSP5dt+T0XmcDE8wz/3xuR7VmW8TO7FdWuqbGnhvpw8ESJ/OISkATCh7UVilGzCdGasIksPf4XqMGrAdrXwpp/noG/g7k2YYAdfGwc1/K3PIocbVHr8B30HKqeFLjjkvyz6g56DpV/15o+SvSWs/QCGbpTEswAr3YM/e7wQE/TCDkRzmBTBRPMJlIzNFLkq2IO/wGnmmx6aOvHeRpx+q1ebKKt4N4Qlro2C2M4cB/lO8mrWhd1XNE4rGtUaTqByWCjNPuFu4KAJKuuoWBHF/wMYtYMOMsevoplHp6SdktFLsluLDJea85pFVJnqNBtdIobobMznwyk0se8Z/AeRemOts46n+z75SZyM8t0uAKb+iXBlGgykXeSkW1DAP80EUx8X9a9ji+8C2NTxV0GHuRPUmhpNQDp4/jd4CbcVfiGgCetOcZ7KVXi7LKwcODY3lixvhgTxn9QSDRJwIO7RtPe9VKIqMgNxugmNf0de4sNubsvtzEXqrvd9C0M6oM=
     ports:
       - "4444:22"
     volumes:
+      - jenkins-data:/var/jenkins_home
       - jenkins-docker-certs:/certs/client:ro
 networks:
   jenkins:
